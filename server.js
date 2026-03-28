@@ -168,7 +168,7 @@ const REFERRAL_MILESTONES = [
 
 // Tỷ lệ quy đổi: 20,000,000 Giấy Bạc = 2,000 VND
 const GIAY_BAC_TO_VND = 2000 / 20000000; // = 0.0001 VND / Giấy Bạc
-const MIN_WITHDRAW_GIAY_BAC = 20000000;
+const MIN_WITHDRAW_GIAY_BAC = 2000;
 
 // Tốc độ theo level (Giấy Bạc/giờ)
 const LEVEL_RATES = {
