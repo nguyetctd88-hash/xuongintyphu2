@@ -541,6 +541,39 @@ app.post('/api/withdraw', async (req, res) => {
   });
 });
 
+// Admin reset tài khoản (chỉ dành cho admin)
+const ADMIN_TELEGRAM_ID = 6513504583;
+
+app.post('/api/admin-reset', async (req, res) => {
+  const { telegram_id, admin_id } = req.body;
+  if (!telegram_id || !admin_id) return res.json({ success: false, message: 'Thiếu thông tin' });
+  if (Number(admin_id) !== ADMIN_TELEGRAM_ID) {
+    return res.json({ success: false, message: 'Không có quyền!' });
+  }
+
+  const { error } = await supabase
+    .from('users')
+    .update({
+      giay_bac: 0,
+      level: 1,
+      session_end: 0,
+      last_mine_time: Date.now(),
+      last_video_time: 0,
+      joined_channels: [],
+      claimed_milestones: [],
+      referred_by: null
+    })
+    .eq('telegram_id', telegram_id);
+
+  if (error) {
+    console.error('Admin reset error:', error);
+    return res.json({ success: false, message: 'Lỗi DB: ' + error.message });
+  }
+
+  console.log(`[ADMIN RESET] telegram_id=${telegram_id} đã được reset bởi admin`);
+  return res.json({ success: true });
+});
+
 // API trả về constants cho frontend
 app.get('/api/config', (req, res) => {
   res.json({
